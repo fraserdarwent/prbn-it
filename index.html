@@ -10,6 +10,10 @@
   <a id="result"></div>
     <script>
       function shorten(url, resultElement) {
+        if (!url.match(/http(s)?:\/\//)){
+          url = `https://${url}`
+        }
+
         fetch(`https://prbn.it/${url}`, { method: "POST", })
           .then((response) => response.text())
           .then((body) => {
