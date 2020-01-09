@@ -1,11 +1,26 @@
 <html>
-  <head>
-    <title>prbn.it</title>
-  </head>
-  <body>
-    <input id="url" type="text"/>
-    <button onclick="shorten(document.getElementById('url').value, document.getElementById('result'))">></button>
-    <a id="result"></div>
-    <script src="index.js"></script>
-  </body>
+
+<head>
+  <title>prbn.it</title>
+</head>
+
+<body>
+  <input id="url" type="text" />
+  <button onclick="shorten(document.getElementById('url').value, document.getElementById('result'))">></button>
+  <a id="result"></div>
+    <script>
+      function shorten(url, resultElement) {
+        fetch(`https://prbn.it/${url}`, { method: "POST", })
+          .then((response) => response.text())
+          .then((body) => {
+            resultElement.innerText = body
+            resultElement.setAttribute('href', body)
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      }
+    </script>
+</body>
+
 </html>
