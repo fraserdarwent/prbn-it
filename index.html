@@ -7,8 +7,11 @@
 
 <body>
   <h1>prbn.it</h1>
-  <input id="url" type="text" />
-  <button onclick="shorten(document.getElementById('url').value, document.getElementById('result'))">></button>
+  <div id="input">
+    <input id="url" type="text" />
+    <div id="status" hidden></div>
+  </div>
+  <button onclick="shorten()">></button>
   <div id="result-container"><a id="result"></a></div>
   <style>
     * {
@@ -32,11 +35,50 @@
       font-size: 3rem;
     }
 
-    input {
+    #input {
+      /* required to locate the status div */
+      position: relative;
       border: solid 1px black;
-      border-radius: px;
-      min-height: 30px;
       grid-column: 1/6;
+      padding: 5px;
+      height: 30px;
+    }
+
+    #input>input {
+      border: none;
+      width: 100%;
+      height: 100%;
+      font-size: 100%;
+    }
+
+    #input>#status {
+      position: absolute;
+      height: 40px;
+      width: 40px;
+      top: 0;
+      right: 0;
+    }
+
+    #input>#status:after {
+      content: " ";
+      display: block;
+      width: 20px;
+      height: 20px;
+      margin: 7px;
+      border-radius: 50%;
+      border: 3px solid black;
+      border-color: black transparent black transparent;
+      animation: lds-dual-ring 1.2s linear infinite;
+    }
+
+    @keyframes lds-dual-ring {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
     }
 
     input:active,
@@ -51,6 +93,7 @@
       fill: transparent;
       border: solid 1px black;
       grid-column: 7/8;
+      font-weight: 800;
     }
 
     button:hover {
@@ -60,7 +103,7 @@
     }
 
     #result-container {
-      grid-column: 2/6;
+      grid-column: 1/6;
     }
 
     a {
@@ -68,14 +111,22 @@
     }
   </style>
   <script>
-    function shorten(url, resultElement) {
+    function shorten() {
+      let url = document.getElementById('url').value;
+      let resultElement = document.getElementById('result');
+
+      if (url.length < 1) {
+        return
+      }
+
       if (!url.match(/http(s)?:\/\//)) {
         url = `https://${url}`
       }
-
+      document.getElementById('status').toggleAttribute('hidden', false)
       fetch(`https://prbn.it/${url}`, { method: "POST", })
         .then((response) => response.text())
         .then((body) => {
+          document.getElementById('status').toggleAttribute('hidden', true)
           resultElement.innerText = body
           resultElement.setAttribute('href', body)
         })
@@ -83,6 +134,12 @@
           console.log(error)
         })
     }
+
+    document.getElementById('url').addEventListener('keydown', (event) => {
+      if (event.keyCode === 13) {
+        shorten()
+      }
+    });
   </script>
 </body>
 
