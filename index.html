@@ -111,9 +111,11 @@
     }
   </style>
   <script>
+    let urlElement = document.getElementById('url')
+    let resultElement = document.getElementById('result');
+
     function shorten() {
-      let url = document.getElementById('url').value;
-      let resultElement = document.getElementById('result');
+      let url = urlElement.value;
 
       if (url.length < 1) {
         return
@@ -139,6 +141,10 @@
       if (event.keyCode === 13) {
         shorten()
       }
+    });
+
+    window.addEventListener('load', (event) => {
+      urlElement.focus()
     });
   </script>
 </body>
