@@ -143,6 +143,7 @@
     let resultElement = document.getElementById('result');
 
     function shorten() {
+      document.getElementById('copy-status').style.display = 'none';
       let url = urlElement.value;
 
       if (url.length < 1) {
